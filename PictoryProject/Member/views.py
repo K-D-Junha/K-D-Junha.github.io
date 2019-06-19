@@ -13,10 +13,10 @@ from Posting.models import Post,Comment
 
 # Create your views here.
 
-def home(request):
+def index(request):
     if not request.user.is_authenticated: 
         data ={'username': request.user,'is_authenticated': request.user.is_authenticated}
-        return render(request, 'Login/home.html', context={'data': data})
+        return render(request, 'Login/index.html', context={'data': data})
     else:  #여기서 프로필 보여주는걸로
         myfollowings=Following.objects.filter(owner=request.user)
         timeline=Post.objects.filter(user_id=request.user.id)
@@ -28,7 +28,7 @@ def home(request):
         allprofile=Profile.objects.all()
         data ={'username': request.user.username,'password':request.user.password,'is_authenticated': request.user.is_authenticated}
         profile=Profile.objects.get(owner_id=request.user.id)
-        return render(request, 'Login/home.html', context={'data': data, 'profile':profile, 'timeline':timeline,'comments':comments,'allprofile':allprofile})
+        return render(request, 'Login/index.html', context={'data': data, 'profile':profile, 'timeline':timeline,'comments':comments,'allprofile':allprofile})
 
 def loginview(request):
     if request.method=="POST":
@@ -39,7 +39,7 @@ def loginview(request):
         user = authenticate(username=name,password=pwd)
         if user is not None:
             login(request,user)
-            return redirect("home")#시작페이지로 이동
+            return redirect("index")#시작페이지로 이동
             #return redirect("Posting/posting")
         else:
             return render(request,"Login/login_error.html")
@@ -112,7 +112,7 @@ def password_edit(request):
             user.set_password(form.cleaned_data['password'])
             user.save()
             logout(request)
-            return redirect("home")
+            return redirect("index")
         else:
             return render(request,"profile/password_edit_error.html")
      else: #GET방식
@@ -198,4 +198,4 @@ def signoutview(request):
     logout(request)
     delete_user.delete()
 
-    return redirect("home")
+    return redirect("index")

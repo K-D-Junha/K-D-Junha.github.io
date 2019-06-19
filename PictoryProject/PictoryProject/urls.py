@@ -20,7 +20,7 @@ urlpatterns = [
 
     #-------------Regist, login, logout------------
 
-    path('',member.home,name='home'),
+    path('',member.index,name='index'),
     path('register/',member.register,name='register'),
     path('login/',member.loginview,name='login'),
     path('logout/',member.logoutview,name='logout'),
